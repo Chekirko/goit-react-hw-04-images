@@ -30,7 +30,7 @@ export class App extends Component {
     }
   }
 
-  handleChangeState = ({ name }) => {
+  handleChangeState = name => {
     this.setState({ name: name, page: 1, loading: true });
   };
 
