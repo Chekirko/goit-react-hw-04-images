@@ -18,18 +18,15 @@ export const App = function () {
   const [modalContent, setModalContent] = useState('');
 
   useEffect(() => {
-    if (name === '') {
-      return;
-    }
-    fetchImages(name, page).then(response => {
-      setImages(response);
-      setPage(prev => {
-        return prev + 1;
+    if (name) {
+      fetchImages(name, page).then(response => {
+        setImages(prev => [...prev, ...response]);
       });
-    });
-  }, [name]);
+    }
+  }, [name, page]);
 
   const handleChangeState = name => {
+    setImages([]);
     setName(name);
     setPage(1);
     setLoading(true);
@@ -50,15 +47,10 @@ export const App = function () {
   };
 
   const handleLoadMoreBtn = () => {
-    setLoading(true);
-    fetchImages(name, page).then(response => {
-      setImages(prev => {
-        return [...prev, ...response];
-      });
-      setPage(prev => {
-        return prev + 1;
-      });
+    setPage(prev => {
+      return prev + 1;
     });
+    setLoading(true);
   };
 
   const closeModal = () => {
