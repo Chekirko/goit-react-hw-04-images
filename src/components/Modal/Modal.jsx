@@ -1,34 +1,34 @@
 import PropTypes from 'prop-types';
 import { Overlay, StyledModal } from './Modal.styled';
 import { createPortal } from 'react-dom';
-import { Component } from 'react';
+import { useEffect, useCallback } from 'react';
 
 const modalRoot = document.querySelector('#modal-root');
 
-export class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleClose);
-  }
+export const Modal = function ({ onClose, children }) {
+  const handleClose = useCallback(
+    ({ target, currentTarget, code }) => {
+      if (target === currentTarget || code === 'Escape') {
+        onClose();
+      }
+    },
+    [onClose]
+  );
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleClose);
-  }
+  useEffect(() => {
+    window.addEventListener('keydown', handleClose);
+    return () => {
+      window.removeEventListener('keydown', handleClose);
+    };
+  }, [handleClose]);
 
-  handleClose = ({ target, currentTarget, code }) => {
-    if (target === currentTarget || code === 'Escape') {
-      this.props.onClose();
-    }
-  };
-
-  render() {
-    return createPortal(
-      <Overlay onClick={this.handleClose}>
-        <StyledModal>{this.props.children}</StyledModal>
-      </Overlay>,
-      modalRoot
-    );
-  }
-}
+  return createPortal(
+    <Overlay onClick={handleClose}>
+      <StyledModal>{children}</StyledModal>
+    </Overlay>,
+    modalRoot
+  );
+};
 
 Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
