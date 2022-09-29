@@ -7,9 +7,9 @@ import { Modal } from 'components/Modal/Modal';
 import { Button } from 'components/Button/Button';
 import { Loader } from 'components/Loader/Loader';
 
-export const App = function () {
-  const KEY = '20889141-879292f7de0589dc14ea8950f';
+const KEY = '20889141-879292f7de0589dc14ea8950f';
 
+export const App = function () {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
